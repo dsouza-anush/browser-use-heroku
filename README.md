@@ -6,6 +6,12 @@
 
 <h1 align="center">Enable AI to control your browser 🤖</h1>
 
+<p align="center">
+  <a href="https://heroku.com/deploy">
+    <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to Heroku">
+  </a>
+</p>
+
 [![GitHub stars](https://img.shields.io/github/stars/gregpr07/browser-use?style=social)](https://github.com/gregpr07/browser-use/stargazers)
 [![Discord](https://img.shields.io/discord/1303749220842340412?color=7289DA&label=Discord&logo=discord&logoColor=white)](https://link.browser-use.com/discord)
 [![Cloud](https://img.shields.io/badge/Cloud-☁️-blue)](https://cloud.browser-use.com)
@@ -84,6 +90,65 @@ browser-use
 ## MCP Integration
 
 Browser-use supports the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/), enabling integration with Claude Desktop and other MCP-compatible clients.
+
+## Deploy to Heroku
+
+Browser-use can be easily deployed to Heroku. This will set up a Heroku application with all the necessary configurations to run Browser-use as an MCP server.
+
+### Using the Heroku Button
+
+The simplest way to deploy is by clicking the Heroku Button at the top of this README. This will:
+
+1. Create a new Heroku app with the Browser-use code
+2. Configure the necessary buildpacks for Python, APT dependencies, and Chrome
+3. Set up the Heroku AI add-on for MCP integration
+4. Deploy the application automatically
+
+### Manual Deployment
+
+If you prefer to deploy manually, follow these steps:
+
+```bash
+# Clone the repository
+git clone https://github.com/browser-use/browser-use.git
+cd browser-use
+
+# Create a Heroku app
+heroku create
+
+# Add required buildpacks
+heroku buildpacks:add heroku/python
+heroku buildpacks:add https://github.com/heroku/heroku-buildpack-apt
+heroku buildpacks:add https://github.com/heroku/heroku-buildpack-google-chrome
+
+# Add Heroku AI add-on
+heroku addons:create heroku-ai:standard
+
+# Configure environment variables (replace with your actual API keys)
+heroku config:set OPENAI_API_KEY=your_openai_key_here
+heroku config:set ANTHROPIC_API_KEY=your_anthropic_key_here
+heroku config:set IN_DOCKER=true
+
+# Deploy the application
+git push heroku main
+```
+
+### Connecting to the MCP Server
+
+Once deployed, you can connect to your Browser-use MCP server using:
+
+```json
+{
+  "mcpServers": {
+    "browser-use": {
+      "url": "https://your-app-name.herokuapp.com/mcp",
+      "token": "your_token_here"
+    }
+  }
+}
+```
+
+Replace `your-app-name` with your actual Heroku app name and `your_token_here` with the appropriate authentication token from your Heroku AI add-on settings.
 
 ### Use as MCP Server with Claude Desktop
 
