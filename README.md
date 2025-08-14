@@ -150,6 +150,24 @@ Once deployed, you can connect to your Browser-use MCP server using:
 
 Replace `your-app-name` with your actual Heroku app name and `your_token_here` with the appropriate authentication token from your Heroku AI add-on settings.
 
+### Keeping Your Deployment Updated
+
+This repository includes a script to automatically sync with the upstream repository while preserving your Heroku-specific configurations. To update your deployment with the latest changes:
+
+```bash
+# Clone your repository
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+
+# Run the sync script
+./bin/sync_upstream.sh
+
+# Push the updates to your Heroku app
+git push heroku main
+```
+
+The script automatically preserves your Heroku configuration files while pulling in the latest updates from the original repository.
+
 ### Use as MCP Server with Claude Desktop
 
 Add browser-use to your Claude Desktop configuration:
