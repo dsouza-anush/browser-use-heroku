@@ -79,7 +79,7 @@
       "quantity": 1,
       "size": "standard-2x"
     },
-    "mcp": {
+    "mcp-browser": {
       "quantity": 1, 
       "size": "standard-2x"
     }

@@ -135,20 +135,82 @@ git push heroku main
 
 ### Connecting to the MCP Server
 
-Once deployed, you can connect to your Browser-use MCP server using:
+Once deployed to Heroku, your Browser-use application will function as an MCP server that can be connected to from various clients. The MCP server process is named `mcp-browser` in the Procfile to comply with Heroku's MCP naming requirements.
+
+#### Using with Claude Desktop or Other MCP-Compatible Clients
+
+Add your Heroku-deployed browser-use instance to your Claude Desktop configuration:
 
 ```json
 {
   "mcpServers": {
     "browser-use": {
       "url": "https://your-app-name.herokuapp.com/mcp",
-      "token": "your_token_here"
+      "token": "your_heroku_ai_token"
     }
   }
 }
 ```
 
-Replace `your-app-name` with your actual Heroku app name and `your_token_here` with the appropriate authentication token from your Heroku AI add-on settings.
+Replace `your-app-name` with your actual Heroku app name and `your_heroku_ai_token` with the authentication token from your Heroku AI add-on settings.
+
+#### Using the MCP Server Programmatically
+
+You can also connect to your Heroku-deployed Browser-use MCP server programmatically. Here's an example Python script that demonstrates how to do this:
+
+```python
+import asyncio
+import os
+from browser_use import Agent, Controller
+from browser_use.mcp.client import MCPClient
+from browser_use.llm import ChatOpenAI
+
+async def main():
+    # Initialize controller
+    controller = Controller()
+    
+    # Connect to the Heroku-deployed Browser-use MCP server
+    browser_client = MCPClient(
+        server_name="browser-use",
+        url=os.environ.get("HEROKU_MCP_URL"),  # e.g., "https://your-app-name.herokuapp.com/mcp"
+        token=os.environ.get("HEROKU_MCP_TOKEN"),  # Your Heroku AI token
+    )
+    
+    try:
+        # Connect to the MCP server
+        await browser_client.connect()
+        
+        # Register the MCP server's tools to the controller
+        await browser_client.register_to_controller(controller)
+        
+        # Create an agent with the MCP-enabled controller
+        agent = Agent(
+            task="Compare the price of gpt-4o and DeepSeek-V3",
+            llm=ChatOpenAI(model="gpt-4o"),
+            controller=controller
+        )
+        
+        # Run the agent
+        await agent.run()
+    finally:
+        # Ensure we disconnect from the MCP server
+        await browser_client.disconnect()
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+A full working example can be found in the `examples/heroku_mcp_client.py` file.
+
+#### Getting Your Heroku AI Token
+
+To get your Heroku AI token for MCP integration:
+
+1. Deploy your application using the Heroku Button or CLI
+2. Go to your Heroku Dashboard and select your application
+3. Navigate to the "Resources" tab and click on "Heroku AI" add-on
+4. Find your API key/token in the add-on dashboard
+5. Alternatively, use the Heroku CLI: `heroku config:get INFERENCE_KEY -a your-app-name`
 
 ### Keeping Your Deployment Updated
 
