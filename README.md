@@ -212,6 +212,30 @@ To get your Heroku AI token for MCP integration:
 4. Find your API key/token in the add-on dashboard
 5. Alternatively, use the Heroku CLI: `heroku config:get INFERENCE_KEY -a your-app-name`
 
+#### MCP Server Environment Variables
+
+The following environment variables can be configured for your MCP server:
+
+| Variable | Description | Default |
+|----------|-------------|--------|
+| `OPENAI_API_KEY` | Your OpenAI API key | - |
+| `ANTHROPIC_API_KEY` | Your Anthropic API key | - |
+| `AZURE_OPENAI_ENDPOINT` | Your Azure OpenAI endpoint | - |
+| `AZURE_OPENAI_API_KEY` | Your Azure OpenAI API key | - |
+| `GOOGLE_API_KEY` | Your Google API key | - |
+| `DEEPSEEK_API_KEY` | Your Deepseek API key | - |
+| `GROK_API_KEY` | Your Grok API key | - |
+| `NOVITA_API_KEY` | Your Novita API key | - |
+| `ANONYMIZED_TELEMETRY` | Enable/disable anonymous telemetry | `true` |
+| `BROWSER_USE_LOGGING_LEVEL` | Logging level (result, debug, info) | `info` |
+| `BROWSER_USE_CALCULATE_COST` | Enable cost calculations | `false` |
+| `IN_DOCKER` | Optimize Chrome for Docker environments | `true` |
+| `WEB_CONCURRENCY` | Number of concurrent web workers | `1` |
+| `STDIO_MODE_ONLY` | Use only STDIO mode, disable HTTP server | `false` |
+| `API_KEY` | Security key for API authentication | Auto-generated |
+
+You can set these environment variables in the Heroku dashboard after deployment or include them in the deployment process.
+
 ### Keeping Your Deployment Updated
 
 This repository includes a script to automatically sync with the upstream repository while preserving your Heroku-specific configurations. To update your deployment with the latest changes:

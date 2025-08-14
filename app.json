@@ -56,6 +56,21 @@
       "description": "Set this to true to optimize browser-use's chrome for running inside docker",
       "value": "true",
       "required": false
+    },
+    "WEB_CONCURRENCY": {
+      "description": "Number of concurrent web workers (for async SSE server)",
+      "value": "1",
+      "required": false
+    },
+    "STDIO_MODE_ONLY": {
+      "description": "Set to true to disable HTTP server and only use STDIO mode",
+      "value": "false",
+      "required": false
+    },
+    "API_KEY": {
+      "description": "Security key for API authentication (auto-generated if not provided)",
+      "generator": "secret",
+      "required": false
     }
   },
   "buildpacks": [
