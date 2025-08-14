@@ -7,7 +7,7 @@
 <h1 align="center">Enable AI to control your browser 🤖</h1>
 
 <p align="center">
-  <a href="https://heroku.com/deploy">
+  <a href="https://www.heroku.com/deploy?template=https://github.com/dsouza-anush/browser-use-heroku">
     <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy to Heroku">
   </a>
 </p>

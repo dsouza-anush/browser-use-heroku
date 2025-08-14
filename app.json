@@ -1,0 +1,88 @@
+{
+  "name": "Browser Use",
+  "description": "Make websites accessible for AI agents. Automate tasks online with ease.",
+  "repository": "https://github.com/dsouza-anush/browser-use-heroku",
+  "logo": "https://raw.githubusercontent.com/browser-use/browser-use/main/static/browser-use.png",
+  "keywords": ["ai", "browser", "automation", "python", "mcp"],
+  "env": {
+    "OPENAI_API_KEY": {
+      "description": "Your OpenAI API key",
+      "required": false
+    },
+    "ANTHROPIC_API_KEY": {
+      "description": "Your Anthropic API key",
+      "required": false
+    },
+    "AZURE_OPENAI_ENDPOINT": {
+      "description": "Your Azure OpenAI endpoint",
+      "required": false
+    },
+    "AZURE_OPENAI_API_KEY": {
+      "description": "Your Azure OpenAI API key",
+      "required": false
+    },
+    "GOOGLE_API_KEY": {
+      "description": "Your Google API key",
+      "required": false
+    },
+    "DEEPSEEK_API_KEY": {
+      "description": "Your Deepseek API key",
+      "required": false
+    },
+    "GROK_API_KEY": {
+      "description": "Your Grok API key",
+      "required": false
+    },
+    "NOVITA_API_KEY": {
+      "description": "Your Novita API key",
+      "required": false
+    },
+    "ANONYMIZED_TELEMETRY": {
+      "description": "Set to false to disable anonymized telemetry",
+      "value": "true",
+      "required": false
+    },
+    "BROWSER_USE_LOGGING_LEVEL": {
+      "description": "Set to debug to enable verbose logging, set to result to get results only. Available: result | debug | info",
+      "value": "info",
+      "required": false
+    },
+    "BROWSER_USE_CALCULATE_COST": {
+      "description": "(beta) Add cost calculations to tokens. Available: true | false",
+      "value": "false",
+      "required": false
+    },
+    "IN_DOCKER": {
+      "description": "Set this to true to optimize browser-use's chrome for running inside docker",
+      "value": "true",
+      "required": false
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-apt"
+    },
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-google-chrome"
+    }
+  ],
+  "addons": [
+    {
+      "plan": "heroku-ai:standard"
+    }
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "standard-2x"
+    },
+    "mcp": {
+      "quantity": 1, 
+      "size": "standard-2x"
+    }
+  },
+  "success_url": "/"
+}
