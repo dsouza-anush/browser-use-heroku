@@ -137,6 +137,8 @@ git push heroku main
 
 Once deployed to Heroku, your Browser-use application will function as an MCP server that can be connected to from various clients. The MCP server process is named `mcp-browser` in the Procfile to comply with Heroku's MCP naming requirements.
 
+> **Important:** The MCP server is configured to scale to 0 dynos by default, as recommended by Heroku for MCP servers. When you need to use it, you'll need to scale it up using the Heroku CLI or dashboard: `heroku ps:scale mcp-browser=1 -a your-app-name`
+
 #### Using with Claude Desktop or Other MCP-Compatible Clients
 
 Add your Heroku-deployed browser-use instance to your Claude Desktop configuration:
