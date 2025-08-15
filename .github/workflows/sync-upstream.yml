@@ -1,0 +1,77 @@
+name: Sync with upstream repository
+
+on:
+  schedule:
+    # Run daily at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  sync-upstream:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Add upstream repository
+        run: |
+          git remote add upstream https://github.com/browser-use/browser-use.git
+          git fetch upstream
+      
+      - name: Merge upstream changes
+        run: |
+          # Store Heroku-specific files in a temporary location
+          mkdir -p /tmp/heroku-files
+          cp Procfile /tmp/heroku-files/ || true
+          cp app.json /tmp/heroku-files/ || true
+          cp Aptfile /tmp/heroku-files/ || true
+          cp runtime.txt /tmp/heroku-files/ || true
+          cp bin/post_compile /tmp/heroku-files/ || true
+          cp bin/sync_upstream.sh /tmp/heroku-files/ || true
+          cp requirements.txt /tmp/heroku-files/ || true
+          cp examples/heroku_mcp_client.py /tmp/heroku-files/ || true
+          
+          # Create a branch for the merge
+          SYNC_BRANCH="sync-upstream-$(date +%Y%m%d-%H%M%S)"
+          git checkout -b $SYNC_BRANCH
+          
+          # Merge upstream changes (allow failures)
+          git merge upstream/main -m "Merge upstream changes" || true
+          
+          # Restore Heroku-specific files
+          cp /tmp/heroku-files/Procfile ./ || true
+          cp /tmp/heroku-files/app.json ./ || true
+          cp /tmp/heroku-files/Aptfile ./ || true
+          cp /tmp/heroku-files/runtime.txt ./ || true
+          mkdir -p bin
+          cp /tmp/heroku-files/post_compile bin/ || true
+          cp /tmp/heroku-files/sync_upstream.sh bin/ || true
+          cp /tmp/heroku-files/requirements.txt ./ || true
+          mkdir -p examples
+          cp /tmp/heroku-files/heroku_mcp_client.py examples/ || true
+          
+          # Add and commit the restored files if they exist
+          git add Procfile app.json Aptfile runtime.txt bin/post_compile bin/sync_upstream.sh requirements.txt examples/heroku_mcp_client.py || true
+          if git diff --staged --quiet; then
+            echo "No changes to Heroku-specific files detected."
+          else
+            git commit -m "Restore Heroku-specific files after upstream sync"
+          fi
+      
+      - name: Push changes to main
+        run: |
+          # Push changes to main
+          git checkout main
+          git merge $SYNC_BRANCH -m "Merge upstream changes while preserving Heroku configuration"
+          git push origin main
+          
+          # Clean up the temporary branch
+          git branch -D $SYNC_BRANCH

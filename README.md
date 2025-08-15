@@ -238,7 +238,20 @@ You can set these environment variables in the Heroku dashboard after deployment
 
 ### Keeping Your Deployment Updated
 
-This repository includes a script to automatically sync with the upstream repository while preserving your Heroku-specific configurations. To update your deployment with the latest changes:
+#### Automatic Updates via GitHub Actions
+
+This repository includes a GitHub Actions workflow that automatically syncs with the upstream repository on a daily basis while preserving all Heroku-specific configurations. The workflow:
+
+1. Runs daily at 00:00 UTC (can also be triggered manually)
+2. Fetches the latest changes from the upstream repository
+3. Preserves all Heroku-specific files during the update
+4. Commits and pushes the merged changes to the main branch
+
+No manual intervention is needed to keep your repository updated with the latest features and fixes from the original repository.
+
+#### Manual Updates
+
+If you prefer to update manually, this repository also includes a script to sync with the upstream repository. To update your deployment with the latest changes:
 
 ```bash
 # Clone your repository
